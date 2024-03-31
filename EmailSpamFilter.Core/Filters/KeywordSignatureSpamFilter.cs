@@ -1,5 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
-using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Utilities;
 
 public class KeywordSignatureSpamFilter : ISpamFilter
@@ -9,7 +9,7 @@ public class KeywordSignatureSpamFilter : ISpamFilter
 
 	public KeywordSignatureSpamFilter(IKeywordHasher keywordHasher, IEnumerable<string> spamKeywords)
 	{
-		this.keywordHasher = keywordHasher;
+		this.keywordHasher = keywordHasher ?? throw new ArgumentNullException(nameof(keywordHasher));
 
 		foreach (var keyword in spamKeywords)
 		{
