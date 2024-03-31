@@ -9,13 +9,15 @@ using Microsoft.Extensions.Configuration;
 public class LinkAnalysisSpamFilterTest
 {
 	private ILinkExtractor linkExtractor = new RegexLinkExtractor();
+	private ILinkSafetyChecker linkSafetyChecker;
 	private ISpamFilter spamFilter;
 
 	[SetUp]
 	public void SetUp()
 	{
 		var configuration = new ConfigurationBuilder().AddUserSecrets<LinkAnalysisSpamFilter>().Build();
-		spamFilter = new LinkAnalysisSpamFilter(linkExtractor, configuration);
+		linkSafetyChecker = new GoogleSafeBrowsingLinkSafetyChecker(configuration);
+		spamFilter = new LinkAnalysisSpamFilter(linkExtractor, linkSafetyChecker);
 	}
 
 	[Test]

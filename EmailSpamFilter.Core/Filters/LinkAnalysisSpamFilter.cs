@@ -1,31 +1,16 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
-using System.Text.RegularExpressions;
 using EmailSpamFilter.Core.Models;
 using EmailSpamFilter.Core.Utilities;
-using Google.Apis.Safebrowsing.v4;
-using Google.Apis.Safebrowsing.v4.Data;
-using Google.Apis.Services;
-using Microsoft.Extensions.Configuration;
 
 public class LinkAnalysisSpamFilter : ISpamFilter
 {
 	private readonly ILinkExtractor linkExtractor;
-	private readonly SafebrowsingService safebrowsingService;
+	private readonly ILinkSafetyChecker linkSafetyChecker;
 
-	public LinkAnalysisSpamFilter(ILinkExtractor linkExtractor, IConfiguration configuration)
+	public LinkAnalysisSpamFilter(ILinkExtractor linkExtractor, ILinkSafetyChecker linkSafetyChecker)
 	{
 		this.linkExtractor = linkExtractor ?? throw new ArgumentNullException(nameof(linkExtractor));
-
-		if (string.IsNullOrWhiteSpace(configuration["googleApiKey"]))
-		{
-			throw new ArgumentException("Google API key is missing");
-		}
-
-		var googleApiKey = configuration["googleApiKey"];
-		safebrowsingService = new SafebrowsingService(new BaseClientService.Initializer
-		{
-			ApiKey = googleApiKey
-		});
+		this.linkSafetyChecker = linkSafetyChecker ?? throw new ArgumentNullException(nameof(linkSafetyChecker));
 	}
 
 	public async Task<bool> IsSpamAsync(Email email)
@@ -34,7 +19,7 @@ public class LinkAnalysisSpamFilter : ISpamFilter
 
 		foreach (var link in links)
 		{
-			var isUnsafe = await IsLinkUnsafe(link);
+			var isUnsafe = await linkSafetyChecker.IsLinkUnsafeAsync(link);
 
 			if (isUnsafe)
 			{
@@ -43,43 +28,5 @@ public class LinkAnalysisSpamFilter : ISpamFilter
 		}
 
 		return false;
-	}
-
-	private async Task<bool> IsLinkUnsafe(string link)
-	{
-		var threatMatchesRequest = new GoogleSecuritySafebrowsingV4FindThreatMatchesRequest
-		{
-			Client = new GoogleSecuritySafebrowsingV4ClientInfo
-			{
-				ClientId = "EmailSpamFilter",
-				ClientVersion = "1.0.0"
-			},
-			ThreatInfo = new GoogleSecuritySafebrowsingV4ThreatInfo
-			{
-				ThreatTypes = new List<string>
-				{
-					"MALWARE",
-					"SOCIAL_ENGINEERING",
-					"UNWANTED_SOFTWARE",
-					"POTENTIALLY_HARMFUL_APPLICATION"
-				},
-				PlatformTypes = new List<string>
-				{
-					"WINDOWS"
-				},
-				ThreatEntryTypes = new List<string>
-				{
-					"URL"
-				},
-				ThreatEntries = new List<GoogleSecuritySafebrowsingV4ThreatEntry>
-				{
-					new GoogleSecuritySafebrowsingV4ThreatEntry { Url = link }
-				}
-			}
-		};
-
-		var threatMatches = await safebrowsingService.ThreatMatches.Find(threatMatchesRequest).ExecuteAsync();
-
-		return threatMatches?.Matches?.Count > 0;
 	}
 }
