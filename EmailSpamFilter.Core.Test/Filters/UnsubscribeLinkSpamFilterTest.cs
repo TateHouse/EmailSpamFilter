@@ -1,6 +1,6 @@
 ﻿namespace EmailSpamFilter.Core.Test.Filters;
+using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Filters;
-using EmailSpamFilter.Core.Models;
 using EmailSpamFilter.Core.Utilities;
 using FluentAssertions;
 using Moq;

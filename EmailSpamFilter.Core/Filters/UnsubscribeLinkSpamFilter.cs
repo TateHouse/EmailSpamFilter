@@ -1,5 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
-using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Utilities;
 
 public class UnsubscribeLinkSpamFilter : ISpamFilter

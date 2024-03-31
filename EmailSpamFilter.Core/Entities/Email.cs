@@ -1,4 +1,4 @@
-﻿namespace EmailSpamFilter.Core.Models;
+﻿namespace EmailSpamFilter.Core.Entities;
 public class Email
 {
 	public string Subject { get; private set; }
