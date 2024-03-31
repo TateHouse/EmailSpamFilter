@@ -18,12 +18,13 @@ public class KeywordSignatureSpamFilter : ISpamFilter
 		}
 	}
 
-	public bool IsSpam(Email email)
+	public Task<bool> IsSpamAsync(Email email)
 	{
 		var subjectWords = email.Subject.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
 		var bodyWords = email.Body.Split(' ', StringSplitOptions.RemoveEmptyEntries).ToList();
+		var isSpam = subjectWords.Exists(IsKeywordSpam) || bodyWords.Exists(IsKeywordSpam);
 
-		return subjectWords.Exists(IsKeywordSpam) || bodyWords.Exists(IsKeywordSpam);
+		return Task.FromResult(isSpam);
 	}
 
 	private bool IsKeywordSpam(string keyword)
