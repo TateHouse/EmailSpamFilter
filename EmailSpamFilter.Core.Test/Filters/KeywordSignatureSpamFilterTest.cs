@@ -28,7 +28,7 @@ public class KeywordSignatureSpamFilterTest
 	}
 
 	[Test]
-	public async Task GivenEmailWithSubjectContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
+	public async Task GivenEmailWithSubjectContainingSpamKeyword_WhenIsSpamAsync_ThenReturnsTrue()
 	{
 		var email = new Email("Claim your free gift", "Hello, you have won a free gift.");
 		var result = await spamFilter.IsSpamAsync(email);
@@ -37,7 +37,7 @@ public class KeywordSignatureSpamFilterTest
 	}
 
 	[Test]
-	public async Task GivenEmailWithBodyContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
+	public async Task GivenEmailWithBodyContainingSpamKeyword_WhenIsSpamAsync_ThenReturnsTrue()
 	{
 		var email = new Email("Important", "Buy now and get 50% off.");
 		var result = await spamFilter.IsSpamAsync(email);
@@ -46,7 +46,7 @@ public class KeywordSignatureSpamFilterTest
 	}
 
 	[Test]
-	public async Task GivenEmailWithoutSpamKeyword_WhenIsSpam_ThenReturnsFalse()
+	public async Task GivenEmailWithoutSpamKeyword_WhenIsSpamAsync_ThenReturnsFalse()
 	{
 		var email = new Email("Hello", "This is a test email.");
 		var result = await spamFilter.IsSpamAsync(email);
