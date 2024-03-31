@@ -1,19 +1,21 @@
 ﻿namespace EmailSpamFilter.Core.Test.Filters;
 using EmailSpamFilter.Core.Filters;
 using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Utilities;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 
 [TestFixture]
 public class LinkAnalysisSpamFilterTest
 {
+	private ILinkExtractor linkExtractor = new RegexLinkExtractor();
 	private ISpamFilter spamFilter;
 
 	[SetUp]
 	public void SetUp()
 	{
 		var configuration = new ConfigurationBuilder().AddUserSecrets<LinkAnalysisSpamFilter>().Build();
-		spamFilter = new LinkAnalysisSpamFilter(configuration);
+		spamFilter = new LinkAnalysisSpamFilter(linkExtractor, configuration);
 	}
 
 	[Test]

@@ -1,6 +1,7 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
 using System.Text.RegularExpressions;
 using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Utilities;
 using Google.Apis.Safebrowsing.v4;
 using Google.Apis.Safebrowsing.v4.Data;
 using Google.Apis.Services;
@@ -8,10 +9,13 @@ using Microsoft.Extensions.Configuration;
 
 public class LinkAnalysisSpamFilter : ISpamFilter
 {
+	private readonly ILinkExtractor linkExtractor;
 	private readonly SafebrowsingService safebrowsingService;
 
-	public LinkAnalysisSpamFilter(IConfiguration configuration)
+	public LinkAnalysisSpamFilter(ILinkExtractor linkExtractor, IConfiguration configuration)
 	{
+		this.linkExtractor = linkExtractor ?? throw new ArgumentNullException(nameof(linkExtractor));
+
 		if (string.IsNullOrWhiteSpace(configuration["googleApiKey"]))
 		{
 			throw new ArgumentException("Google API key is missing");
@@ -26,7 +30,7 @@ public class LinkAnalysisSpamFilter : ISpamFilter
 
 	public async Task<bool> IsSpamAsync(Email email)
 	{
-		var links = ExtractLinks(email.Body);
+		var links = linkExtractor.ExtractLinks(email.Body);
 
 		foreach (var link in links)
 		{
@@ -39,14 +43,6 @@ public class LinkAnalysisSpamFilter : ISpamFilter
 		}
 
 		return false;
-	}
-
-	private static IEnumerable<string> ExtractLinks(string text)
-	{
-		const string pattern = @"^(https:|http:|www\.)\S*";
-		var regex = new Regex(pattern, RegexOptions.IgnoreCase);
-
-		return regex.Matches(text).Select(match => match.Value).ToList();
 	}
 
 	private async Task<bool> IsLinkUnsafe(string link)
