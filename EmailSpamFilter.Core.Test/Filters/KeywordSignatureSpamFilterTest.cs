@@ -3,17 +3,17 @@ using EmailSpamFilter.Core.Filters;
 using EmailSpamFilter.Core.Models;
 using EmailSpamFilter.Core.Utilities;
 using FluentAssertions;
+using Moq;
 
 [TestFixture]
 public class KeywordSignatureSpamFilterTest
 {
-	private readonly IKeywordHasher keywordHasher = new KeywordHasherSHA256();
+	private Mock<IKeywordHasher> mockKeywordHasher;
 	private ISpamFilter spamFilter;
 
 	[SetUp]
 	public void SetUp()
 	{
-
 		var spamKeywords = new List<string>
 		{
 			"Free",
@@ -24,7 +24,14 @@ public class KeywordSignatureSpamFilterTest
 			"Deal"
 		};
 
-		spamFilter = new KeywordSignatureSpamFilter(keywordHasher, spamKeywords);
+		mockKeywordHasher = new Mock<IKeywordHasher>();
+
+		foreach (var keyword in spamKeywords)
+		{
+			mockKeywordHasher.Setup(mock => mock.HashKeyword(keyword)).Returns($"HASH: {keyword}");
+		}
+
+		spamFilter = new KeywordSignatureSpamFilter(mockKeywordHasher.Object, spamKeywords);
 	}
 
 	[Test]
