@@ -28,28 +28,28 @@ public class KeywordSignatureSpamFilterTest
 	}
 
 	[Test]
-	public void GivenEmailWithSubjectContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
+	public async Task GivenEmailWithSubjectContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
 	{
 		var email = new Email("Claim your free gift", "Hello, you have won a free gift.");
-		var result = spamFilter.IsSpam(email);
+		var result = await spamFilter.IsSpamAsync(email);
 
 		result.Should().BeTrue();
 	}
 
 	[Test]
-	public void GivenEmailWithBodyContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
+	public async Task GivenEmailWithBodyContainingSpamKeyword_WhenIsSpam_ThenReturnsTrue()
 	{
 		var email = new Email("Important", "Buy now and get 50% off.");
-		var result = spamFilter.IsSpam(email);
+		var result = await spamFilter.IsSpamAsync(email);
 
 		result.Should().BeTrue();
 	}
 
 	[Test]
-	public void GivenEmailWithoutSpamKeyword_WhenIsSpam_ThenReturnsFalse()
+	public async Task GivenEmailWithoutSpamKeyword_WhenIsSpam_ThenReturnsFalse()
 	{
 		var email = new Email("Hello", "This is a test email.");
-		var result = spamFilter.IsSpam(email);
+		var result = await spamFilter.IsSpamAsync(email);
 
 		result.Should().BeFalse();
 	}

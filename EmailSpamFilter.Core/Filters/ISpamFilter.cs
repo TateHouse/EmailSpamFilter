@@ -3,5 +3,5 @@ using EmailSpamFilter.Core.Models;
 
 public interface ISpamFilter
 {
-	public bool IsSpam(Email email);
+	public Task<bool> IsSpamAsync(Email email);
 }
