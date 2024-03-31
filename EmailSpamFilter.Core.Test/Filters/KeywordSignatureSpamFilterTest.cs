@@ -1,11 +1,13 @@
 ﻿namespace EmailSpamFilter.Core.Test.Filters;
 using EmailSpamFilter.Core.Filters;
 using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Utilities;
 using FluentAssertions;
 
 [TestFixture]
 public class KeywordSignatureSpamFilterTest
 {
+	private readonly IKeywordHasher keywordHasher = new KeywordHasherSHA256();
 	private ISpamFilter spamFilter;
 
 	[SetUp]
@@ -22,7 +24,7 @@ public class KeywordSignatureSpamFilterTest
 			"Deal"
 		};
 
-		spamFilter = new KeywordSignatureSpamFilter(spamKeywords);
+		spamFilter = new KeywordSignatureSpamFilter(keywordHasher, spamKeywords);
 	}
 
 	[Test]

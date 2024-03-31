@@ -1,17 +1,19 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
-using System.Security.Cryptography;
-using System.Text;
 using EmailSpamFilter.Core.Models;
+using EmailSpamFilter.Core.Utilities;
 
 public class KeywordSignatureSpamFilter : ISpamFilter
 {
+	private readonly IKeywordHasher keywordHasher;
 	private readonly HashSet<string> spamSignatures = new HashSet<string>();
 
-	public KeywordSignatureSpamFilter(IEnumerable<string> spamKeywords)
+	public KeywordSignatureSpamFilter(IKeywordHasher keywordHasher, IEnumerable<string> spamKeywords)
 	{
+		this.keywordHasher = keywordHasher;
+
 		foreach (var keyword in spamKeywords)
 		{
-			var hash = KeywordSignatureSpamFilter.HashKeyword(keyword);
+			var hash = keywordHasher.HashKeyword(keyword);
 			spamSignatures.Add(hash);
 		}
 	}
@@ -24,18 +26,9 @@ public class KeywordSignatureSpamFilter : ISpamFilter
 		return subjectWords.Exists(IsKeywordSpam) || bodyWords.Exists(IsKeywordSpam);
 	}
 
-	private static string HashKeyword(string keyword)
-	{
-		var formatted = keyword.Trim().ToLowerInvariant();
-		var bytes = Encoding.UTF8.GetBytes(formatted);
-		var hash = SHA256.HashData(bytes);
-
-		return Convert.ToBase64String(hash);
-	}
-
 	private bool IsKeywordSpam(string keyword)
 	{
-		var hash = KeywordSignatureSpamFilter.HashKeyword(keyword);
+		var hash = keywordHasher.HashKeyword(keyword);
 
 		return spamSignatures.Contains(hash);
 	}
