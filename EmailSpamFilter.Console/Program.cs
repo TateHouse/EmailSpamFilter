@@ -9,4 +9,5 @@ public static class Program
 		configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
 		configurationBuilder.AddJsonFile("AppSettings.json", false, true);
 		var configuration = configurationBuilder.Build();
+	}
 }
