@@ -1,4 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
+using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Utilities;
 
 public class SpamFilterFactory : ISpamFilterFactory
@@ -6,17 +7,17 @@ public class SpamFilterFactory : ISpamFilterFactory
 	private readonly IKeywordHasher keywordHasher;
 	private readonly ILinkExtractor linkExtractor;
 	private readonly ILinkSafetyChecker linkSafetyChecker;
-	private readonly IEnumerable<string> spamKeywords;
+	private readonly ISpamKeywordsProvider spamKeywordsProvider;
 
 	public SpamFilterFactory(IKeywordHasher keywordHasher,
 							 ILinkExtractor linkExtractor,
 							 ILinkSafetyChecker linkSafetyChecker,
-							 IEnumerable<string> spamKeywords)
+							 ISpamKeywordsProvider spamKeywordsProvider)
 	{
 		this.keywordHasher = keywordHasher;
 		this.linkExtractor = linkExtractor;
 		this.linkSafetyChecker = linkSafetyChecker;
-		this.spamKeywords = spamKeywords;
+		this.spamKeywordsProvider = spamKeywordsProvider;
 	}
 
 	public ISpamFilter Create(SpamFilterType spamFilterType)
@@ -24,6 +25,8 @@ public class SpamFilterFactory : ISpamFilterFactory
 		switch (spamFilterType)
 		{
 			case SpamFilterType.KeywordSignature:
+				var spamKeywords = spamKeywordsProvider.GetSpamKeywords();
+
 				return new KeywordSignatureSpamFilter(keywordHasher, spamKeywords);
 
 			case SpamFilterType.LinkAnalysis:

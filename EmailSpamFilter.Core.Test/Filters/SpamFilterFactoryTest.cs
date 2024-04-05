@@ -1,4 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Test.Filters;
+using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Filters;
 using EmailSpamFilter.Core.Utilities;
 using FluentAssertions;
@@ -11,6 +12,7 @@ public class SpamFilterFactoryTest
 	private Mock<IKeywordHasher> mockKeywordHasher;
 	private Mock<ILinkExtractor> mockLinkExtractor;
 	private Mock<ILinkSafetyChecker> mockLinkSafetyChecker;
+	private Mock<ISpamKeywordsProvider> mockSpamKeywordsProvider;
 
 	[SetUp]
 	public void SetUp()
@@ -18,10 +20,11 @@ public class SpamFilterFactoryTest
 		mockKeywordHasher = new Mock<IKeywordHasher>();
 		mockLinkExtractor = new Mock<ILinkExtractor>();
 		mockLinkSafetyChecker = new Mock<ILinkSafetyChecker>();
+		mockSpamKeywordsProvider = new Mock<ISpamKeywordsProvider>();
 		spamFilterFactory = new SpamFilterFactory(mockKeywordHasher.Object,
 												  mockLinkExtractor.Object,
 												  mockLinkSafetyChecker.Object,
-												  new List<string>());
+												  mockSpamKeywordsProvider.Object);
 	}
 
 	[Test]
