@@ -59,7 +59,7 @@ public class TextEmailLoaderTest
 
 	private void CreateEmailTextFiles(byte emailCount)
 	{
-		for (var index = 0; index < emailCount; index++)
+		for (var index = 0; index < emailCount; ++index)
 		{
 			var content = $"This is the subject line for email {index}\nThis is the body for email {index}.";
 			var nameWithExtension = $"Email_{index}.txt";
