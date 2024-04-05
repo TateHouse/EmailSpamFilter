@@ -4,23 +4,29 @@ using System.Collections.Immutable;
 
 public class SpamKeywordsProvider : ISpamKeywordsProvider
 {
-	private readonly IConfiguration configuration;
+	private readonly string path;
 
 	public SpamKeywordsProvider(IConfiguration configuration)
 	{
-		if (configuration == null || string.IsNullOrWhiteSpace(configuration["SpamKeywordsFile"]))
+		const string key = "SpamKeywordsFile";
+		var path = configuration[key];
+
+		if (string.IsNullOrWhiteSpace(path))
 		{
 			throw new ArgumentNullException(nameof(configuration),
 											"The configuration must contain the SpamKeywords section");
 		}
 
-		this.configuration = configuration;
+		if (!File.Exists(path))
+		{
+			throw new FileNotFoundException("The provided spam keywords file does not exist.");
+		}
+
+		this.path = path;
 	}
 
 	public IEnumerable<string> GetSpamKeywords()
 	{
-		var spamKeywordsPath = configuration["SpamKeywordsFile"];
-
-		return new HashSet<string>(File.ReadAllLines(spamKeywordsPath)).ToImmutableHashSet();
+		return new HashSet<string>(File.ReadAllLines(path)).ToImmutableHashSet();
 	}
 }

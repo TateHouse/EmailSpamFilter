@@ -1,22 +1,24 @@
 ﻿namespace EmailSpamFilter.Console.Utilities;
 using EmailSpamFilter.Console.Models;
+using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Filters;
 using Console=System.Console;
 
-public class ConsoleUserInterface
+public class ConsoleUserInterface : IConsoleUserInterface
 {
 	private const int PrimarySeparatorLength = 50;
 	private const int SecondarySeparatorLength = 50;
 	private readonly string primarySeparator = new string('=', ConsoleUserInterface.PrimarySeparatorLength);
 	private readonly string secondarySeparator = new string('-', ConsoleUserInterface.SecondarySeparatorLength);
-	private readonly IReadOnlyDictionary<byte, SpamFilterType> availableSpamFilters;
-	private readonly IConsoleStringBuilder<FilteredEmail> filteredEmailStringBuilder;
 
-	public ConsoleUserInterface(IReadOnlyDictionary<byte, SpamFilterType> availableSpamFilters,
-								IConsoleStringBuilder<FilteredEmail> filteredEmailStringBuilder)
+	private readonly IReadOnlyDictionary<byte, SpamFilterType> spamFilterTypes;
+	private readonly IConsoleStringBuilder<FilteredEmail> emailStringBuilder;
+
+	public ConsoleUserInterface(ISpamFilterProvider spamFilterProvider,
+								IConsoleStringBuilder<FilteredEmail> emailStringBuilder)
 	{
-		this.availableSpamFilters = availableSpamFilters;
-		this.filteredEmailStringBuilder = filteredEmailStringBuilder;
+		spamFilterTypes = spamFilterProvider.AvailableSpamFilterTypes;
+		this.emailStringBuilder = emailStringBuilder;
 	}
 
 	public void DisplayAvailableFilters()
@@ -25,7 +27,7 @@ public class ConsoleUserInterface
 		Console.WriteLine("Available Spam Filters");
 		PrintPrimarySeparator();
 
-		foreach (var spamFilterType in availableSpamFilters)
+		foreach (var spamFilterType in spamFilterTypes)
 		{
 			Console.WriteLine($"{spamFilterType.Key}: {spamFilterType.Value}");
 		}
@@ -59,7 +61,7 @@ public class ConsoleUserInterface
 					throw new ArgumentNullException();
 				}
 
-				if (selectedFilters.Exists(filter => !availableSpamFilters.ContainsKey(filter)))
+				if (selectedFilters.Exists(filter => !spamFilterTypes.ContainsKey(filter)))
 				{
 					throw new FormatException();
 				}
@@ -77,14 +79,14 @@ public class ConsoleUserInterface
 		}
 	}
 
-	public void DisplayFilteredEmails(IEnumerable<FilteredEmail> filteredEmails, byte indentationLevel)
+	public void DisplayFilteredEmails(IEnumerable<FilteredEmail> emails, byte indentationLevel)
 	{
 		PrintPrimarySeparator();
 
-		foreach (var filteredEmail in filteredEmails)
+		foreach (var email in emails)
 		{
 			PrintSecondarySeparator();
-			var formatted = filteredEmailStringBuilder.ToString(filteredEmail, indentationLevel);
+			var formatted = emailStringBuilder.ToString(email, indentationLevel);
 			Console.WriteLine(formatted);
 			PrintSecondarySeparator();
 		}

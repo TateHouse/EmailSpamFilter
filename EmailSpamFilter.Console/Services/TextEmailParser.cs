@@ -4,17 +4,17 @@ using EmailSpamFilter.Console.Models;
 public class TextEmailParser : IEmailParser
 {
 	private readonly static char[] NewLine = new[] { '\n' };
-	private readonly LoadedEmail loadedEmail;
+	private readonly LoadedEmail email;
 
-	public TextEmailParser(LoadedEmail loadedEmail)
+	public TextEmailParser(LoadedEmail email)
 	{
-		this.loadedEmail = loadedEmail;
+		this.email = email;
 	}
 
 	public ParsedEmail Parse()
 	{
 		const byte minimumLines = 2;
-		var lines = loadedEmail.Source.Split(TextEmailParser.NewLine, StringSplitOptions.None);
+		var lines = email.Source.Split(TextEmailParser.NewLine, StringSplitOptions.None);
 
 		if (lines.Length < minimumLines)
 		{
@@ -24,6 +24,6 @@ public class TextEmailParser : IEmailParser
 		var subject = lines[0].Trim();
 		var body = string.Join("\n", lines.Skip(1)).Trim();
 
-		return new ParsedEmail(loadedEmail.FileName, subject, body);
+		return new ParsedEmail(email.FileName, subject, body);
 	}
 }

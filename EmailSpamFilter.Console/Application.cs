@@ -3,90 +3,69 @@ using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Console.Utilities;
 using EmailSpamFilter.Core.Filters;
-using EmailSpamFilter.Core.Utilities;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Immutable;
 
 public class Application
 {
-	private readonly IConfiguration configuration;
+	private readonly IEmailLoaderFactory emailLoaderFactory;
+	private readonly IEmailParserFactory emailParserFactory;
 	private readonly ISpamFilterProvider spamFilterProvider;
-	private readonly ConsoleUserInterface consoleUserInterface;
+	private readonly ISpamEmailFilterFactory spamEmailFilterFactory;
+	private readonly IConsoleUserInterface consoleUserInterface;
 
-	public Application(string appSettingsPath, string secretsPath)
+	public Application(IEmailLoaderFactory emailLoaderFactory,
+					   IEmailParserFactory emailParserFactory,
+					   ISpamFilterProvider spamFilterProvider,
+					   ISpamEmailFilterFactory spamEmailFilterFactory,
+					   IConsoleUserInterface consoleUserInterface)
 	{
-		if (string.IsNullOrWhiteSpace(appSettingsPath))
-		{
-			throw new ArgumentException("The app settings path must be provided", nameof(appSettingsPath));
-		}
-
-		var configurationBuilder = new ConfigurationBuilder();
-		configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
-		configurationBuilder.AddJsonFile(appSettingsPath, false, true);
-		configurationBuilder.AddJsonFile(secretsPath, false, true);
-
-		configuration = configurationBuilder.Build();
-
-		var spamKeywordsPath = configuration["SpamKeywordsFile"];
-
-		if (string.IsNullOrWhiteSpace(spamKeywordsPath))
-		{
-			throw new ArgumentException("The spam keywords path must be provided", nameof(spamKeywordsPath));
-		}
-
-		var keywordHasher = new KeywordHasherSHA256();
-		var linkExtractor = new RegexLinkExtractor();
-		var linkSafetyChecker = new GoogleSafeBrowsingLinkSafetyChecker(configuration);
-		var spamKeywords = new HashSet<string>(File.ReadAllLines(spamKeywordsPath)).ToImmutableHashSet();
-		var spamFilterFactory = new SpamFilterFactory(keywordHasher, linkExtractor, linkSafetyChecker, spamKeywords);
-
-		spamFilterProvider = new SpamFilterProvider(spamFilterFactory);
-
-		var filteredEmailStringBuilder = new FilteredEmailStringBuilder();
-		consoleUserInterface = new ConsoleUserInterface(spamFilterProvider.AvailableSpamFilterTypes,
-														filteredEmailStringBuilder);
+		this.emailLoaderFactory = emailLoaderFactory;
+		this.emailParserFactory = emailParserFactory;
+		this.spamFilterProvider = spamFilterProvider;
+		this.spamEmailFilterFactory = spamEmailFilterFactory;
+		this.consoleUserInterface = consoleUserInterface;
 	}
 
 	public async Task Run()
 	{
-		var emailLoader = new TextEmailLoader(configuration["EmailsPath"]);
-		var loadedEmails = (await emailLoader.LoadAsync()).ToList();
-		var parsedEmails = ParseEmailsInParallel(loadedEmails);
+		var emailLoader = emailLoaderFactory.Create();
+		var loadedEmails = await emailLoader.LoadAsync();
+		var parsedEmails = ParseEmails(loadedEmails);
 
 		consoleUserInterface.DisplayAvailableFilters();
 
-		var selectedFilters = consoleUserInterface.SelectFilters();
-		var filteredEmails = await FilterEmailsInParallel(parsedEmails, selectedFilters);
+		var filters = consoleUserInterface.SelectFilters();
+		var filteredEmails = await FilterEmails(parsedEmails, filters);
 
 		const byte indentationLevel = 1;
 		consoleUserInterface.DisplayFilteredEmails(filteredEmails, indentationLevel);
 	}
 
-	private IEnumerable<ParsedEmail> ParseEmailsInParallel(IEnumerable<LoadedEmail> loadedEmails)
+	private IEnumerable<ParsedEmail> ParseEmails(IEnumerable<LoadedEmail> loadedEmails)
 	{
 		var parsedEmails = new List<ParsedEmail>();
+
 		Parallel.ForEach(loadedEmails,
-						 loadedEmail =>
+						 loaded =>
 						 {
-							 var emailParser = new TextEmailParser(loadedEmail);
-							 var parsedEmail = emailParser.Parse();
-							 parsedEmails.Add(parsedEmail);
+							 var parser = emailParserFactory.Create(loaded);
+							 var email = parser.Parse();
+							 parsedEmails.Add(email);
 						 });
 
 		return parsedEmails;
 	}
 
-	private async Task<IEnumerable<FilteredEmail>> FilterEmailsInParallel(IEnumerable<ParsedEmail> parsedEmails,
-																		  IEnumerable<byte> selectedSpamFilters)
+	private async Task<IEnumerable<FilteredEmail>> FilterEmails(IEnumerable<ParsedEmail> parsedEmails,
+																IEnumerable<byte> spamFilterIds)
 	{
 		var filteredEmails = new List<FilteredEmail>();
 
 		var tasks = parsedEmails.Select(async parsedEmail =>
 		{
-			var spamFilters = selectedSpamFilters.Select(spamFilterType => (SpamFilterType)spamFilterType)
-												 .Select(spamFilterProvider.Create)
-												 .ToList();
-			var spamEmailFilter = new SpamEmailFilter(spamFilters, parsedEmail);
+			var spamFilters = spamFilterIds.Select(spamFilterType => (SpamFilterType)spamFilterType)
+										   .Select(spamFilterProvider.Create)
+										   .ToList();
+			var spamEmailFilter = spamEmailFilterFactory.Create(spamFilters, parsedEmail);
 			var filteredEmail = await spamEmailFilter.FilterAsync();
 			filteredEmails.Add(filteredEmail);
 		});

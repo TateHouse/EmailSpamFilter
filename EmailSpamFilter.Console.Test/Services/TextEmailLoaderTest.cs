@@ -1,39 +1,57 @@
 ﻿namespace EmailSpamFilter.Console.Test.Services;
 using EmailSpamFilter.Console.Services;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
+using Moq;
 
 [TestFixture]
 public class TextEmailLoaderTest
 {
-	private string path;
+	private Mock<IConfiguration> mockConfiguration;
 	private IEmailLoader emailLoader;
 
 	[SetUp]
 	public void SetUp()
 	{
-		path = Path.Combine(Path.GetTempPath(), "EmailSpamFilter.Console.Test/Services/TextEmailLoaderTest");
-		Directory.CreateDirectory(path);
-		emailLoader = new TextEmailLoader(path);
+		mockConfiguration = new Mock<IConfiguration>();
+		mockConfiguration.Setup(mock => mock["EmailsPath"])
+						 .Returns("EmailSpamFilter.Console.Test/Services/TextEmailLoaderTest");
+		Directory.CreateDirectory(mockConfiguration.Object["EmailsPath"]!);
+		emailLoader = new TextEmailLoader(mockConfiguration.Object);
 	}
 
 	[TearDown]
 	public void TearDown()
 	{
-		Directory.Delete(path, true);
+		Directory.Delete(mockConfiguration.Object["EmailsPath"]!, true);
 	}
 
 	[Test]
 	public void GivenEmptyPath_WhenInstantiate_ThenThrowsArgumentException()
 	{
-		var action = () => new TextEmailLoader(string.Empty);
+		mockConfiguration.Reset();
+		mockConfiguration.Setup(mock => mock["EmailsPath"]).Returns(string.Empty);
+		var action = () => new TextEmailLoader(mockConfiguration.Object);
+
 		action.Should().Throw<ArgumentException>();
+
+		mockConfiguration.Reset();
+		mockConfiguration.Setup(mock => mock["EmailsPath"])
+						 .Returns("EmailSpamFilter.Console.Test/Services/TextEmailLoaderTest");
 	}
 
 	[Test]
 	public void GivenNonExistentPath_WhenInstantiate_ThenThrowsDirectoryNotFoundException()
 	{
-		var action = () => new TextEmailLoader("NonExistentPath/Emails");
+		mockConfiguration.Reset();
+		mockConfiguration.Setup(mock => mock["EmailsPath"]).Returns("NonExistentPath/Emails");
+		var action = () => new TextEmailLoader(mockConfiguration.Object);
+
 		action.Should().Throw<DirectoryNotFoundException>();
+
+		mockConfiguration.Reset();
+		mockConfiguration.Setup(mock => mock["EmailsPath"])
+						 .Returns("EmailSpamFilter.Console.Test/Services/TextEmailLoaderTest");
 	}
 
 	[Test]
@@ -63,6 +81,7 @@ public class TextEmailLoaderTest
 		{
 			var content = $"This is the subject line for email {index}\nThis is the body for email {index}.";
 			var nameWithExtension = $"Email_{index}.txt";
+			var path = mockConfiguration.Object["EmailsPath"]!;
 			File.WriteAllText(Path.Combine(path, nameWithExtension), content);
 		}
 	}

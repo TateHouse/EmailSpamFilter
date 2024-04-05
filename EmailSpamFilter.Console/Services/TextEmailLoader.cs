@@ -1,17 +1,23 @@
 ﻿namespace EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Console.Models;
+using Microsoft.Extensions.Configuration;
 
 public class TextEmailLoader : IEmailLoader
 {
 	private const string FileExtension = ".txt";
 	private readonly string path;
 
-	public TextEmailLoader(string path)
+	public TextEmailLoader(IConfiguration configuration)
 	{
+		const string key = "EmailsPath";
+		var path = configuration[key];
+
 		if (string.IsNullOrWhiteSpace(path))
 		{
-			throw new ArgumentException("The path cannot be null or whitespace.", nameof(path));
+			throw new ArgumentException("The emails path must be provided", nameof(configuration));
 		}
+
+		path = configuration[key];
 
 		if (!Directory.Exists(path))
 		{
