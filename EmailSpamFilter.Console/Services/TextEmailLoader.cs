@@ -1,4 +1,6 @@
 ﻿namespace EmailSpamFilter.Console.Services;
+using EmailSpamFilter.Console.Models;
+
 public class TextEmailLoader : IEmailLoader
 {
 	private const string FileExtension = ".txt";
@@ -19,15 +21,17 @@ public class TextEmailLoader : IEmailLoader
 		this.path = path;
 	}
 
-	public async Task<IEnumerable<string>> LoadAsync()
+	public async Task<IEnumerable<LoadedEmail>> LoadAsync()
 	{
-		var emails = new List<string>();
+		var emails = new List<LoadedEmail>();
 		var files = Directory.GetFiles(path, $"*{TextEmailLoader.FileExtension}");
 
 		foreach (var file in files)
 		{
+			var name = Path.GetFileNameWithoutExtension(file);
 			var content = await File.ReadAllTextAsync(file);
-			emails.Add(content);
+			var loadedEmail = new LoadedEmail(name, content);
+			emails.Add(loadedEmail);
 		}
 
 		return emails;

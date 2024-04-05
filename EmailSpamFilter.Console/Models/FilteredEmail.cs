@@ -1,14 +1,12 @@
 ﻿namespace EmailSpamFilter.Console.Models;
-using EmailSpamFilter.Core.Entities;
-
 public class FilteredEmail
 {
-	public Email Email { get; }
+	public string FileName { get; }
 	public bool IsSpam { get; }
 
-	public FilteredEmail(Email email, bool isSpam)
+	public FilteredEmail(string fileName, bool isSpam)
 	{
-		Email = email ?? throw new ArgumentNullException(nameof(email));
+		FileName = fileName;
 		IsSpam = isSpam;
 	}
 }

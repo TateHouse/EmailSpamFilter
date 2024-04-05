@@ -1,4 +1,5 @@
 ﻿namespace EmailSpamFilter.Console.Test.Services;
+using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Filters;
@@ -9,20 +10,20 @@ using Moq;
 public class SpamEmailFilterTest
 {
 	private Mock<List<ISpamFilter>> mockSpamFilters;
-	private Email email;
+	private ParsedEmail parsedEmail;
 	private ISpamEmailFilter spamEmailFilter;
 
 	[SetUp]
 	public void SetUp()
 	{
-		email = new Email("Subject", "Body");
+		parsedEmail = new ParsedEmail("Email", "Subject", "Body");
 		mockSpamFilters = new Mock<List<ISpamFilter>>();
 	}
 
 	[Test]
 	public void GivenNoSpamFilters_WhenInstantiate_ThenThrowsArgumentException()
 	{
-		var action = () => new SpamEmailFilter(mockSpamFilters.Object, email);
+		var action = () => new SpamEmailFilter(mockSpamFilters.Object, parsedEmail);
 		action.Should().Throw<ArgumentException>();
 	}
 
@@ -31,7 +32,7 @@ public class SpamEmailFilterTest
 	{
 		var spamFilterResults = new List<bool> { false };
 		CreateMockSpamFilters(spamFilterResults);
-		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, email);
+		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, parsedEmail);
 
 		var result = await spamEmailFilter.FilterAsync();
 
@@ -43,7 +44,7 @@ public class SpamEmailFilterTest
 	{
 		var spamFilterResults = new List<bool> { true };
 		CreateMockSpamFilters(spamFilterResults);
-		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, email);
+		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, parsedEmail);
 
 		var result = await spamEmailFilter.FilterAsync();
 
@@ -55,7 +56,7 @@ public class SpamEmailFilterTest
 	{
 		var spamFilterResults = new List<bool> { true, true, true };
 		CreateMockSpamFilters(spamFilterResults);
-		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, email);
+		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, parsedEmail);
 
 		var result = await spamEmailFilter.FilterAsync();
 
@@ -67,7 +68,7 @@ public class SpamEmailFilterTest
 	{
 		var spamFilterResults = new List<bool> { true, false, true };
 		CreateMockSpamFilters(spamFilterResults);
-		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, email);
+		spamEmailFilter = new SpamEmailFilter(mockSpamFilters.Object, parsedEmail);
 
 		var result = await spamEmailFilter.FilterAsync();
 
@@ -79,7 +80,7 @@ public class SpamEmailFilterTest
 		foreach (var result in spamFilterResults)
 		{
 			var mockSpamFilter = new Mock<ISpamFilter>();
-			mockSpamFilter.Setup(mock => mock.IsSpamAsync(email)).ReturnsAsync(result);
+			mockSpamFilter.Setup(mock => mock.IsSpamAsync(It.IsAny<Email>())).ReturnsAsync(result);
 			mockSpamFilters.Object.Add(mockSpamFilter.Object);
 		}
 	}

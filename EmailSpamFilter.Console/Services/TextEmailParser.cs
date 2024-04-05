@@ -1,25 +1,20 @@
 ﻿namespace EmailSpamFilter.Console.Services;
-using EmailSpamFilter.Core.Entities;
+using EmailSpamFilter.Console.Models;
 
 public class TextEmailParser : IEmailParser
 {
 	private readonly static char[] NewLine = new[] { '\n' };
-	private readonly string source;
+	private readonly LoadedEmail loadedEmail;
 
-	public TextEmailParser(string source)
+	public TextEmailParser(LoadedEmail loadedEmail)
 	{
-		if (string.IsNullOrWhiteSpace(source))
-		{
-			throw new ArgumentException("Value cannot be null or whitespace.", nameof(source));
-		}
-
-		this.source = source;
+		this.loadedEmail = loadedEmail;
 	}
 
-	public Email Parse()
+	public ParsedEmail Parse()
 	{
 		const byte minimumLines = 2;
-		var lines = source.Split(TextEmailParser.NewLine, StringSplitOptions.None);
+		var lines = loadedEmail.Source.Split(TextEmailParser.NewLine, StringSplitOptions.None);
 
 		if (lines.Length < minimumLines)
 		{
@@ -29,6 +24,6 @@ public class TextEmailParser : IEmailParser
 		var subject = lines[0].Trim();
 		var body = string.Join("\n", lines.Skip(1)).Trim();
 
-		return new Email(subject, body);
+		return new ParsedEmail(loadedEmail.FileName, subject, body);
 	}
 }

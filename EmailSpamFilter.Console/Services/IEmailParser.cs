@@ -1,7 +1,7 @@
 ﻿namespace EmailSpamFilter.Console.Services;
-using EmailSpamFilter.Core.Entities;
+using EmailSpamFilter.Console.Models;
 
 public interface IEmailParser
 {
-	public Email Parse();
+	public ParsedEmail Parse();
 }

@@ -6,9 +6,9 @@ using EmailSpamFilter.Core.Filters;
 public class SpamEmailFilter : ISpamEmailFilter
 {
 	private readonly IEnumerable<ISpamFilter> spamFilters;
-	private readonly Email email;
+	private readonly ParsedEmail parsedEmail;
 
-	public SpamEmailFilter(IEnumerable<ISpamFilter> spamFilters, Email email)
+	public SpamEmailFilter(IEnumerable<ISpamFilter> spamFilters, ParsedEmail parsedEmail)
 	{
 		this.spamFilters = spamFilters.ToList();
 
@@ -17,7 +17,7 @@ public class SpamEmailFilter : ISpamEmailFilter
 			throw new ArgumentException("At least one spam filter is required.", nameof(spamFilters));
 		}
 
-		this.email = email;
+		this.parsedEmail = parsedEmail;
 	}
 
 	public async Task<FilteredEmail> FilterAsync()
@@ -26,6 +26,7 @@ public class SpamEmailFilter : ISpamEmailFilter
 
 		foreach (var spamFilter in spamFilters)
 		{
+			var email = new Email(parsedEmail.Subject, parsedEmail.Body);
 			isSpam = await spamFilter.IsSpamAsync(email);
 
 			if (!isSpam)
@@ -34,6 +35,6 @@ public class SpamEmailFilter : ISpamEmailFilter
 			}
 		}
 
-		return new FilteredEmail(email, isSpam);
+		return new FilteredEmail(parsedEmail.FileName, isSpam);
 	}
 }

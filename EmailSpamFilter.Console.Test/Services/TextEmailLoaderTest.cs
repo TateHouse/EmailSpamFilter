@@ -43,7 +43,7 @@ public class TextEmailLoaderTest
 
 		var emails = (await emailLoader.LoadAsync()).ToList();
 		emails.Should().HaveCount(1);
-		emails[0].Should().Be("This is the subject line for email 0\nThis is the body for email 0.");
+		emails[0].Source.Should().Be("This is the subject line for email 0\nThis is the body for email 0.");
 	}
 
 	[Test]
@@ -53,8 +53,8 @@ public class TextEmailLoaderTest
 
 		var emails = (await emailLoader.LoadAsync()).ToList();
 		emails.Should().HaveCount(8);
-		emails[0].Should().Be("This is the subject line for email 0\nThis is the body for email 0.");
-		emails[7].Should().Be("This is the subject line for email 7\nThis is the body for email 7.");
+		emails[0].Source.Should().Be("This is the subject line for email 0\nThis is the body for email 0.");
+		emails[7].Source.Should().Be("This is the subject line for email 7\nThis is the body for email 7.");
 	}
 
 	private void CreateEmailTextFiles(byte emailCount)
