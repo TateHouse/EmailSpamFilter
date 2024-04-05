@@ -28,7 +28,7 @@ public class TextEmailLoader : IEmailLoader
 
 		foreach (var file in files)
 		{
-			var name = Path.GetFileNameWithoutExtension(file);
+			var name = Path.GetFileName(file);
 			var content = await File.ReadAllTextAsync(file);
 			var loadedEmail = new LoadedEmail(name, content);
 			emails.Add(loadedEmail);
