@@ -19,18 +19,18 @@ public class SpamFilterFactory : ISpamFilterFactory
 		this.spamKeywords = spamKeywords;
 	}
 
-	public async Task<ISpamFilter> CreateAsync(SpamFilterType spamFilterType)
+	public ISpamFilter Create(SpamFilterType spamFilterType)
 	{
 		switch (spamFilterType)
 		{
 			case SpamFilterType.KeywordSignature:
-				return await Task.FromResult(new KeywordSignatureSpamFilter(keywordHasher, spamKeywords));
+				return new KeywordSignatureSpamFilter(keywordHasher, spamKeywords);
 
 			case SpamFilterType.LinkAnalysis:
-				return await Task.FromResult(new LinkAnalysisSpamFilter(linkExtractor, linkSafetyChecker));
+				return new LinkAnalysisSpamFilter(linkExtractor, linkSafetyChecker);
 
 			case SpamFilterType.UnsubscribeLink:
-				return await Task.FromResult(new UnsubscribeLinkSpamFilter(linkExtractor));
+				return new UnsubscribeLinkSpamFilter(linkExtractor);
 
 			default:
 				throw new ArgumentException($"Invalid spam filter type: {spamFilterType}");

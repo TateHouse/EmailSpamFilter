@@ -25,27 +25,27 @@ public class SpamFilterFactoryTest
 	}
 
 	[Test]
-	public async Task GivenKeywordSignatureSpamFilterType_WhenCreateAsync_ThenReturnsKeywordSignatureSpamFilter()
+	public void GivenKeywordSignatureSpamFilterType_WhenCreateAsync_ThenReturnsKeywordSignatureSpamFilter()
 	{
-		var result = await spamFilterFactory.CreateAsync(SpamFilterType.KeywordSignature);
+		var result = spamFilterFactory.Create(SpamFilterType.KeywordSignature);
 
 		result.Should().NotBeNull();
 		result.Should().BeOfType<KeywordSignatureSpamFilter>();
 	}
 
 	[Test]
-	public async Task GivenLinkAnalysisSpamFilterType_WhenCreateAsync_ThenReturnsLinkAnalysisSpamFilter()
+	public void GivenLinkAnalysisSpamFilterType_WhenCreateAsync_ThenReturnsLinkAnalysisSpamFilter()
 	{
-		var result = await spamFilterFactory.CreateAsync(SpamFilterType.LinkAnalysis);
+		var result = spamFilterFactory.Create(SpamFilterType.LinkAnalysis);
 
 		result.Should().NotBeNull();
 		result.Should().BeOfType<LinkAnalysisSpamFilter>();
 	}
 
 	[Test]
-	public async Task GivenUnsubscribeLinkSpamFilterType_WhenCreateAsync_ThenReturnsUnsubscribeLinkSpamFilter()
+	public void GivenUnsubscribeLinkSpamFilterType_WhenCreateAsync_ThenReturnsUnsubscribeLinkSpamFilter()
 	{
-		var result = await spamFilterFactory.CreateAsync(SpamFilterType.UnsubscribeLink);
+		var result = spamFilterFactory.Create(SpamFilterType.UnsubscribeLink);
 
 		result.Should().NotBeNull();
 		result.Should().BeOfType<UnsubscribeLinkSpamFilter>();

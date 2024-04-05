@@ -1,5 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
 public interface ISpamFilterFactory
 {
-	public Task<ISpamFilter> CreateAsync(SpamFilterType spamFilterType);
+	public ISpamFilter Create(SpamFilterType spamFilterType);
 }
