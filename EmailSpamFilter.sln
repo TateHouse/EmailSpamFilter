@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSpamFilter.Core", "Ema
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSpamFilter.Core.Test", "EmailSpamFilter.Core.Test\EmailSpamFilter.Core.Test.csproj", "{33C8C0E9-D0FA-40A8-9818-CF74D17A3B7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSpamFilter.Console", "EmailSpamFilter.Console\EmailSpamFilter.Console.csproj", "{18062BC9-DF48-4EDD-8351-85A30C69528D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSpamFilter.Console.Test", "EmailSpamFilter.Console.Test\EmailSpamFilter.Console.Test.csproj", "{9D34066A-3701-4597-8515-F5DC5C80004F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{33C8C0E9-D0FA-40A8-9818-CF74D17A3B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33C8C0E9-D0FA-40A8-9818-CF74D17A3B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33C8C0E9-D0FA-40A8-9818-CF74D17A3B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18062BC9-DF48-4EDD-8351-85A30C69528D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18062BC9-DF48-4EDD-8351-85A30C69528D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18062BC9-DF48-4EDD-8351-85A30C69528D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18062BC9-DF48-4EDD-8351-85A30C69528D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D34066A-3701-4597-8515-F5DC5C80004F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D34066A-3701-4597-8515-F5DC5C80004F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D34066A-3701-4597-8515-F5DC5C80004F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D34066A-3701-4597-8515-F5DC5C80004F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
