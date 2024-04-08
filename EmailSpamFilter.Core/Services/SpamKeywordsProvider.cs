@@ -36,6 +36,8 @@ public class SpamKeywordsProvider : ISpamKeywordsProvider
 
 	public IEnumerable<string> GetSpamKeywords()
 	{
-		return new HashSet<string>(File.ReadAllLines(path)).ToImmutableHashSet();
+		var source = File.ReadAllLines(path);
+
+		return source.Select(keyword => keyword.Trim().ToLowerInvariant()).ToImmutableHashSet();
 	}
 }
