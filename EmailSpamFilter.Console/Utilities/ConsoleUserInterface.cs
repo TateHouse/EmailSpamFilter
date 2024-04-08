@@ -4,6 +4,9 @@ using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Filters;
 using Console=System.Console;
 
+/// <summary>
+/// A class for allowing user interaction through the console.
+/// </summary>
 public class ConsoleUserInterface : IConsoleUserInterface
 {
 	private const int PrimarySeparatorLength = 50;
@@ -14,6 +17,13 @@ public class ConsoleUserInterface : IConsoleUserInterface
 	private readonly IReadOnlyDictionary<byte, SpamFilterType> spamFilterTypes;
 	private readonly IConsoleStringBuilder<FilteredEmail> emailStringBuilder;
 
+	/// <summary>
+	/// Instantiates a <see cref="ConsoleUserInterface"/>.
+	/// </summary>
+	/// <param name="spamFilterProvider">An instance of <see cref="ISpamFilterProvider"/> used for providing
+	/// <see cref="ISpamFilter"/>.</param>
+	/// <param name="emailStringBuilder">An instance of <see cref="IConsoleStringBuilder{FilteredEmail}"/> used for formatting
+	/// <see cref="FilteredEmail"/> into strings.</param>
 	public ConsoleUserInterface(ISpamFilterProvider spamFilterProvider,
 								IConsoleStringBuilder<FilteredEmail> emailStringBuilder)
 	{

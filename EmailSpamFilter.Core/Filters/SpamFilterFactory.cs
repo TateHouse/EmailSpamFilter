@@ -2,6 +2,9 @@
 using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Utilities;
 
+/// <summary>
+/// A factory for creating <see cref="ISpamFilter"/>.
+/// </summary>
 public class SpamFilterFactory : ISpamFilterFactory
 {
 	private readonly IKeywordHasher keywordHasher;
@@ -9,6 +12,14 @@ public class SpamFilterFactory : ISpamFilterFactory
 	private readonly ILinkSafetyChecker linkSafetyChecker;
 	private readonly ISpamKeywordsProvider spamKeywordsProvider;
 
+	/// <summary>
+	/// Instantiates a new <see cref="SpamFilterFactory"/> instance.
+	/// </summary>
+	/// <param name="keywordHasher">An instance of <see cref="IKeywordHasher"/>.</param>
+	/// <param name="linkExtractor">An instance of <see cref="ILinkExtractor"/>.</param>
+	/// <param name="linkSafetyChecker">An instance of <see cref="ILinkSafetyChecker"/>.</param>
+	/// <param name="spamKeywordsProvider">An instance of <see cref="ISpamKeywordsProvider"/> that the factory uses to
+	/// get the collection of spam keywords.</param>
 	public SpamFilterFactory(IKeywordHasher keywordHasher,
 							 ILinkExtractor linkExtractor,
 							 ILinkSafetyChecker linkSafetyChecker,

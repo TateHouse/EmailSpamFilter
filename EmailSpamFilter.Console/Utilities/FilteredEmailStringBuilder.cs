@@ -2,6 +2,9 @@
 using EmailSpamFilter.Console.Models;
 using System.Text;
 
+/// <summary>
+/// A class that builds a string representation of a <see cref="FilteredEmail"/> model.
+/// </summary>
 public class FilteredEmailStringBuilder : IConsoleStringBuilder<FilteredEmail>
 {
 	public string ToString(FilteredEmail model, byte indentationLevel)

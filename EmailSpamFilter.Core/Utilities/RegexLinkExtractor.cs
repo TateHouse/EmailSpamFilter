@@ -1,6 +1,9 @@
 ﻿namespace EmailSpamFilter.Core.Utilities;
 using System.Text.RegularExpressions;
 
+/// <summary>
+/// A class for extracting links from a string using a regular expression.
+/// </summary>
 public class RegexLinkExtractor : ILinkExtractor
 {
 	public IEnumerable<string> ExtractLinks(string text)

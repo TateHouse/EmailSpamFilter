@@ -1,11 +1,18 @@
 ﻿namespace EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Console.Models;
 
+/// <summary>
+/// A class for parsing loaded emails.
+/// </summary>
 public class TextEmailParser : IEmailParser
 {
 	private readonly static char[] NewLine = new[] { '\n' };
 	private readonly LoadedEmail email;
 
+	/// <summary>
+	/// Instantiates a new <see cref="TextEmailParser"/> instance.
+	/// </summary>
+	/// <param name="email">The <see cref="LoadedEmail"/> to parse.</param>
 	public TextEmailParser(LoadedEmail email)
 	{
 		this.email = email;

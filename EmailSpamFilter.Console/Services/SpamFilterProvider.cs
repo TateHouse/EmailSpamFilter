@@ -2,6 +2,9 @@
 using EmailSpamFilter.Core.Filters;
 using System.Collections.ObjectModel;
 
+/// <summary>
+/// A provider for <see cref="ISpamFilter"/> instances.
+/// </summary>
 public class SpamFilterProvider : ISpamFilterProvider
 {
 	public ReadOnlyDictionary<byte, SpamFilterType> AvailableSpamFilterTypes { get; } =
@@ -14,6 +17,11 @@ public class SpamFilterProvider : ISpamFilterProvider
 
 	private readonly ISpamFilterFactory spamFilterFactory;
 
+	/// <summary>
+	/// Instantiates a new <see cref="ISpamFilterFactory"/>.
+	/// </summary>
+	/// <param name="spamFilterFactory">An instance of <see cref="ISpamFilterFactory"/> used to instantiate
+	/// <see cref="ISpamFilter"/>.</param>
 	public SpamFilterProvider(ISpamFilterFactory spamFilterFactory)
 	{
 		this.spamFilterFactory = spamFilterFactory;

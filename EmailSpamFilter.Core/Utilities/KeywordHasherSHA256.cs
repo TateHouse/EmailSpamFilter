@@ -2,6 +2,9 @@
 using System.Security.Cryptography;
 using System.Text;
 
+/// <summary>
+/// A class for hashing keywords using the SHA-256 algorithm and encoding the result as a base64 string.
+/// </summary>
 public class KeywordHasherSHA256 : IKeywordHasher
 {
 	public string HashKeyword(string keyword)

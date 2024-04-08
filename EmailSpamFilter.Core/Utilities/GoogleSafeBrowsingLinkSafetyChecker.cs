@@ -4,10 +4,19 @@ using Google.Apis.Safebrowsing.v4.Data;
 using Google.Apis.Services;
 using Microsoft.Extensions.Configuration;
 
+/// <summary>
+/// A <see cref="ILinkSafetyChecker"/> that uses Google Safe Browsing API to check if a link is safe.
+/// </summary>
 public class GoogleSafeBrowsingLinkSafetyChecker : ILinkSafetyChecker
 {
 	private readonly SafebrowsingService safebrowsingService;
 
+	/// <summary>
+	/// Instantiates a new <see cref="GoogleSafeBrowsingLinkSafetyChecker"/> instance.
+	/// </summary>
+	/// <param name="configuration">An instance of <see cref="IConfiguration"/> that contains the googleApiKey secrets
+	/// file path.</param>
+	/// <exception cref="ArgumentException">Thrown if the googleApiKey configuration value is missing.</exception>
 	public GoogleSafeBrowsingLinkSafetyChecker(IConfiguration configuration)
 	{
 		if (string.IsNullOrWhiteSpace(configuration["googleApiKey"]))

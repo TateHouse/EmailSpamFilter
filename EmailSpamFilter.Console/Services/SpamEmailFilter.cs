@@ -3,11 +3,20 @@ using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Filters;
 
+/// <summary>
+/// A class for filtering spam emails.
+/// </summary>
 public class SpamEmailFilter : ISpamEmailFilter
 {
 	private readonly IEnumerable<ISpamFilter> spamFilters;
 	private readonly ParsedEmail parsedEmail;
 
+	/// <summary>
+	/// Instantiates a <see cref="ISpamFilter"/>.
+	/// </summary>
+	/// <param name="spamFilters">A collection of <see cref="ISpamFilter"/> to use in filtering the email.</param>
+	/// <param name="parsedEmail">A <see cref="ParsedEmail"/> to be filtered.</param>
+	/// <exception cref="ArgumentException">Thrown if no <see cref="ISpamFilter"/> are provided.</exception>
 	public SpamEmailFilter(IEnumerable<ISpamFilter> spamFilters, ParsedEmail parsedEmail)
 	{
 		this.spamFilters = spamFilters.ToList();
