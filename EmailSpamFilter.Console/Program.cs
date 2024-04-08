@@ -3,6 +3,7 @@ using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Console.Utilities;
 using EmailSpamFilter.Core.Filters;
+using EmailSpamFilter.Core.Services;
 using EmailSpamFilter.Core.Utilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,4 @@
-﻿namespace EmailSpamFilter.Console.Services;
+﻿namespace EmailSpamFilter.Core.Services;
 /// <summary>
 /// An interface for providing spam keywords.
 /// </summary>

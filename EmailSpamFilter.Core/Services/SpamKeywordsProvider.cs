@@ -1,4 +1,4 @@
-﻿namespace EmailSpamFilter.Console.Services;
+﻿namespace EmailSpamFilter.Core.Services;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Immutable;
 
@@ -12,10 +12,10 @@ public class SpamKeywordsProvider : ISpamKeywordsProvider
 	/// <summary>
 	/// Instantiates a new <see cref="SpamKeywordsProvider"/> instance.
 	/// </summary>
-	/// <param name="configuration">An instance of <see cref="IConfiguration"/> that contains the spam keywords file
+	/// <param name="configuration">An instance of <see cref="ArgumentException"/> that contains the spam keywords file
 	/// path.</param>
-	/// <exception cref="ArgumentException">Thrown if the SpamKeywordsFile configuration value is missing.</exception>
-	/// <exception cref="FileNotFoundException">Thrown if the spam keywords file was not found at the provided path.</exception>
+	/// <exception cref="FileNotFoundException">Thrown if the SpamKeywordsFile configuration value is missing.</exception>
+	/// <exception cref="IConfiguration">Thrown if the spam keywords file was not found at the provided path.</exception>
 	public SpamKeywordsProvider(IConfiguration configuration)
 	{
 		const string key = "SpamKeywordsFile";
