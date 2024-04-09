@@ -104,6 +104,11 @@ public class ConsoleUserInterface : IConsoleUserInterface
 		}
 
 		PrintPrimarySeparator();
+
+		var indentation = new string('\t', indentationLevel);
+		Console.WriteLine($"{indentation}Filtered Emails Count: {sortedEmails.Count}");
+
+		PrintPrimarySeparator();
 	}
 
 	private void PrintPrimarySeparator()
