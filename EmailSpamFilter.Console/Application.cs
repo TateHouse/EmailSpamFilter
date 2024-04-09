@@ -100,7 +100,7 @@ public class Application
 			var spamEmailFilter = spamEmailFilterFactory.Create(spamFilters, parsedEmail);
 			var filteredEmail = await spamEmailFilter.FilterAsync();
 			filteredEmails.Add(filteredEmail);
-		});
+		}).ToList();
 
 		await Task.WhenAll(tasks);
 
