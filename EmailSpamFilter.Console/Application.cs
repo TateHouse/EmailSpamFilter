@@ -3,6 +3,7 @@ using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Console.Utilities;
 using EmailSpamFilter.Core.Filters;
+using System.Collections.Concurrent;
 
 /// <summary>
 /// A class representing the console application.
@@ -89,7 +90,7 @@ public class Application
 	private async Task<IEnumerable<FilteredEmail>> FilterEmails(IEnumerable<ParsedEmail> parsedEmails,
 																IEnumerable<byte> spamFilterIds)
 	{
-		var filteredEmails = new List<FilteredEmail>();
+		var filteredEmails = new ConcurrentBag<FilteredEmail>();
 
 		var tasks = parsedEmails.Select(async parsedEmail =>
 		{
