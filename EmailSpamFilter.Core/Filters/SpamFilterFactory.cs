@@ -1,5 +1,5 @@
 ﻿namespace EmailSpamFilter.Core.Filters;
-using EmailSpamFilter.Console.Services;
+using EmailSpamFilter.Core.Services;
 using EmailSpamFilter.Core.Utilities;
 
 /// <summary>
