@@ -93,7 +93,9 @@ public class ConsoleUserInterface : IConsoleUserInterface
 	{
 		PrintPrimarySeparator();
 
-		foreach (var email in emails)
+		var sortedEmails = emails.OrderBy(email => email.FileName).ToList();
+
+		foreach (var email in sortedEmails)
 		{
 			PrintSecondarySeparator();
 			var formatted = emailStringBuilder.ToString(email, indentationLevel);
