@@ -34,22 +34,14 @@ public static class Program
 		serviceCollection.AddSingleton<IConsoleUserInterface, ConsoleUserInterface>();
 		serviceCollection.AddSingleton<IConsoleStringBuilder<FilteredEmail>, FilteredEmailStringBuilder>();
 
+		serviceCollection.AddSingleton<Application>();
+
 		serviceCollection.AddTransient<ILinkSafetyChecker, GoogleSafeBrowsingLinkSafetyChecker>();
 		serviceCollection.AddTransient<ISpamKeywordsProvider, SpamKeywordsProvider>();
 
 		var serviceProvider = serviceCollection.BuildServiceProvider();
 
-		var emailLoaderFactory = serviceProvider.GetRequiredService<IEmailLoaderFactory>();
-		var emailParserFactory = serviceProvider.GetRequiredService<IEmailParserFactory>();
-		var spamFilterProvider = serviceProvider.GetRequiredService<ISpamFilterProvider>();
-		var spamEmailFilterFactory = serviceProvider.GetRequiredService<ISpamEmailFilterFactory>();
-		var consoleUserInterface = serviceProvider.GetRequiredService<IConsoleUserInterface>();
-
-		var application = new Application(emailLoaderFactory,
-										  emailParserFactory,
-										  spamFilterProvider,
-										  spamEmailFilterFactory,
-										  consoleUserInterface);
+		var application = serviceProvider.GetRequiredService<Application>();
 
 		await application.Run();
 	}
