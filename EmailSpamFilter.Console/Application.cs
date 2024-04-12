@@ -66,7 +66,7 @@ public class Application
 	/// <returns>A collection of <see cref="ParsedEmail"/>.</returns>
 	private IEnumerable<ParsedEmail> ParseEmails(IEnumerable<LoadedEmail> loadedEmails)
 	{
-		var parsedEmails = new List<ParsedEmail>();
+		var parsedEmails = new ConcurrentBag<ParsedEmail>();
 
 		Parallel.ForEach(loadedEmails,
 						 loaded =>
@@ -93,14 +93,16 @@ public class Application
 		var filteredEmails = new ConcurrentBag<FilteredEmail>();
 
 		var tasks = parsedEmails.Select(async parsedEmail =>
-		{
-			var spamFilters = spamFilterIds.Select(spamFilterType => (SpamFilterType)spamFilterType)
-										   .Select(spamFilterProvider.Create)
-										   .ToList();
-			var spamEmailFilter = spamEmailFilterFactory.Create(spamFilters, parsedEmail);
-			var filteredEmail = await spamEmailFilter.FilterAsync();
-			filteredEmails.Add(filteredEmail);
-		}).ToList();
+								{
+									var spamFilters = spamFilterIds
+													  .Select(spamFilterType => (SpamFilterType)spamFilterType)
+													  .Select(spamFilterProvider.Create)
+													  .ToList();
+									var spamEmailFilter = spamEmailFilterFactory.Create(spamFilters, parsedEmail);
+									var filteredEmail = await spamEmailFilter.FilterAsync();
+									filteredEmails.Add(filteredEmail);
+								})
+								.ToList();
 
 		await Task.WhenAll(tasks);
 
