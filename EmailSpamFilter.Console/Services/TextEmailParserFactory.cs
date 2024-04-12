@@ -1,5 +1,6 @@
 ﻿namespace EmailSpamFilter.Console.Services;
-using EmailSpamFilter.Console.Models;
+using EmailSpamFilter.Core.Entities;
+using EmailSpamFilter.Core.Services;
 
 /// <summary>
 /// A factory for creating <see cref="IEmailParser"/> instances.

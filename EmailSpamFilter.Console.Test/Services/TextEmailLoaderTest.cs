@@ -1,5 +1,6 @@
 ﻿namespace EmailSpamFilter.Console.Test.Services;
 using EmailSpamFilter.Console.Services;
+using EmailSpamFilter.Core.Services;
 using FluentAssertions;
 using Microsoft.Extensions.Configuration;
 using Moq;

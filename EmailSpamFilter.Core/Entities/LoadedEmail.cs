@@ -1,4 +1,4 @@
-﻿namespace EmailSpamFilter.Console.Models;
+﻿namespace EmailSpamFilter.Core.Entities;
 /// <summary>
 /// A class representing a loaded email with a file name and source.
 /// </summary>

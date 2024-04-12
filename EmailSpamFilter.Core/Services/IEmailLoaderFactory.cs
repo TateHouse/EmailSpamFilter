@@ -1,4 +1,5 @@
-﻿namespace EmailSpamFilter.Console.Services;
+﻿namespace EmailSpamFilter.Core.Services;
+
 /// <summary>
 /// An interface for creating <see cref="IEmailLoader"/> instances.
 /// </summary>

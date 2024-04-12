@@ -1,5 +1,6 @@
 ﻿namespace EmailSpamFilter.Console.Services;
 using EmailSpamFilter.Core.Filters;
+using EmailSpamFilter.Core.Services;
 using System.Collections.ObjectModel;
 
 /// <summary>

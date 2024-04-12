@@ -1,4 +1,5 @@
 ﻿namespace EmailSpamFilter.Console.Services;
+using EmailSpamFilter.Core.Services;
 using Microsoft.Extensions.Configuration;
 
 /// <summary>

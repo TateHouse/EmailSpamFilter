@@ -1,6 +1,6 @@
 ﻿namespace EmailSpamFilter.Console.Test.Utilities;
-using EmailSpamFilter.Console.Models;
 using EmailSpamFilter.Console.Utilities;
+using EmailSpamFilter.Core.Entities;
 using FluentAssertions;
 
 [TestFixture]

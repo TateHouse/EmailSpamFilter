@@ -1,6 +1,7 @@
 ﻿namespace EmailSpamFilter.Console.Services;
-using EmailSpamFilter.Console.Models;
+using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Filters;
+using EmailSpamFilter.Core.Services;
 
 /// <summary>
 /// An interface for creating <see cref="ISpamFilter"/> instances.

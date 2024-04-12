@@ -1,7 +1,7 @@
 ﻿namespace EmailSpamFilter.Console.Utilities;
-using EmailSpamFilter.Console.Models;
-using EmailSpamFilter.Console.Services;
+using EmailSpamFilter.Core.Entities;
 using EmailSpamFilter.Core.Filters;
+using EmailSpamFilter.Core.Services;
 using Console=System.Console;
 
 /// <summary>

@@ -1,5 +1,5 @@
 ﻿namespace EmailSpamFilter.Console.Utilities;
-using EmailSpamFilter.Console.Models;
+using EmailSpamFilter.Core.Entities;
 using System.Text;
 
 /// <summary>
