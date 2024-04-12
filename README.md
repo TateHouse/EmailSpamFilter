@@ -1,8 +1,5 @@
 # Email Spam Filter <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/uncw-logo.png" width="300" height="300" align="right" >
 
-<br>
-<br>
-
 ## Overview
 
 This is my final project for CSC-424: Security Tools Engineering. The project revolved around creating a program to
