@@ -1,8 +1,7 @@
-# Email Spam Filter
+# Email Spam Filter <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/uncw-logo.png" width="300" height="300" align="right" >
 
-<div align="center">
-<img src="https://cdn.freebiesupply.com/logos/thumbs/2x/uncw-logo.png" width="300" height="300" align="right" >
-</div>
+<br>
+<br>
 
 ## Overview
 
@@ -49,7 +48,7 @@ stored in the `Secrets.json` file located in the root directory of the project w
 }
 ```
 
-The spam keywords file, `SpamKeywords.txt`, can be modified to specfiy the keywords you would like to use
+The spam keywords file, `SpamKeywords.txt`, can be modified to specify the keywords you would like to use
 for signature-based detection. The keywords should be separated by a newline with one keyword per line.
 
 To meet the project requirements, emails are stored as text files in the `Emails` directory For simplicity, the emails
