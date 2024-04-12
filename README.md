@@ -60,6 +60,15 @@ Where `[Subject]` is the entire first line of the text file containing the email
 two through the end of the file containing the email's body. This format is expected to be followed for all emails in
 the `Emails` directory.
 
-To run the application, simply execute the `EmailSpamFilter.exe` file. If you clone and build the project yourself,
-make sure to copy the `Emails` directory, `SpamKeywords.txt`, and `Secrets.json` to the output directory where the
-executable is located before trying to run the application in your development environment.
+To run the application, simply execute the `EmailSpamFilter.exe` file in a terminal . If you clone and build the project
+yourself, make sure to copy the `Emails` directory, `SpamKeywords.txt`, and `Secrets.json` to the output directory where
+the executable is located before trying to run the application in your development environment.
+
+When the application is run, it requires the user to specify the spam filters to use. The user can choose to use any
+combination of the three spam filters or all three. The available options are:
+
+1. Signature-based Detection
+2. Link Analysis
+3. Unsubscribe Link Detection
+
+Once selected, the application will process all emails in the `Emails` directory and output the results to the console.
