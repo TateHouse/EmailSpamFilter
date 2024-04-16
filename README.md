@@ -60,7 +60,7 @@ Where `[Subject]` is the entire first line of the text file containing the email
 two through the end of the file containing the email's body. This format is expected to be followed for all emails in
 the `Emails` directory.
 
-To run the application, simply execute the `EmailSpamFilter.exe` file in a terminal . If you clone and build the project
+To run the application, simply execute the `EmailSpamFilter.Console.exe` file in a terminal . If you clone and build the project
 yourself, make sure to copy the `Emails` directory, `SpamKeywords.txt`, and `Secrets.json` to the output directory where
 the executable is located before trying to run the application in your development environment.
 
