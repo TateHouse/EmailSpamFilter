@@ -1,4 +1,8 @@
-# Email Spam Filter <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/uncw-logo.png" width="300" height="300" align="right" >
+<div align="center">
+    <img src="https://cdn.freebiesupply.com/logos/thumbs/2x/uncw-logo.png" width="300" height="300">
+</div>
+
+# Email Spam Filter
 
 ## Overview
 
@@ -60,7 +64,8 @@ Where `[Subject]` is the entire first line of the text file containing the email
 two through the end of the file containing the email's body. This format is expected to be followed for all emails in
 the `Emails` directory.
 
-To run the application, simply execute the `EmailSpamFilter.Console.exe` file in a terminal . If you clone and build the project
+To run the application, simply execute the `EmailSpamFilter.Console.exe` file in a terminal . If you clone and build the
+project
 yourself, make sure to copy the `Emails` directory, `SpamKeywords.txt`, and `Secrets.json` to the output directory where
 the executable is located before trying to run the application in your development environment.
 
